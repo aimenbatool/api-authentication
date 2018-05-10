@@ -4,9 +4,10 @@ module.exports = {
   validateBody : (schema) => {
     return (req, res, next) => {
       const result = Joi.validate(req.body, schema);
+      console.log(result.error.details);
       if( result.error ) {
         return res.status(400).json({
-          message : result.error.message
+          message : result.error.details
         })
       }else {
         if(!req.value) {
@@ -22,6 +23,6 @@ module.exports = {
     authSchema : Joi.object().keys({
       email : Joi.string().email().required(),
       password : Joi.string().required()
-    })
+    }).options({abortEarly : false})
   }
 }
